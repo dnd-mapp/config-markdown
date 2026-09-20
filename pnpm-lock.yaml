@@ -165,21 +165,39 @@ settings:
 
 catalogs:
   default:
+    '@dnd-mapp/config-typescript':
+      specifier: ~1.0.0
+      version: 1.0.0
     '@types/node':
       specifier: ~24.13.5
       version: 24.13.5
     markdownlint-cli2:
       specifier: ~0.23.2
       version: 0.23.2
+    typescript:
+      specifier: ~6.0.3
+      version: 6.0.3
   prettier:
+    '@dnd-mapp/config-prettier':
+      specifier: ~1.0.0
+      version: 1.0.0
     prettier:
       specifier: ~3.9.7
       version: 3.9.7
+    prettier-plugin-organize-imports:
+      specifier: ~4.3.0
+      version: 4.3.0
 
 importers:
 
   .:
     devDependencies:
+      '@dnd-mapp/config-prettier':
+        specifier: catalog:prettier
+        version: 1.0.0(prettier@3.9.7)
+      '@dnd-mapp/config-typescript':
+        specifier: 'catalog:'
+        version: 1.0.0(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.5
@@ -189,9 +207,27 @@ importers:
       prettier:
         specifier: catalog:prettier
         version: 3.9.7
+      prettier-plugin-organize-imports:
+        specifier: catalog:prettier
+        version: 4.3.0(prettier@3.9.7)(typescript@6.0.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
     publishDirectory: dist
 
 packages:
+
+  '@dnd-mapp/config-prettier@1.0.0':
+    resolution: {integrity: sha512-+s+ivqgBkRLr9y6akRzPYHZM7f9yIGz/Abbm2gCenzWT02j9b4c/nktkGSu/fZY+Zi8O4nbUnx03nA4/L01i8Q==}
+    engines: {node: ^24.21.0}
+    peerDependencies:
+      prettier: ^3
+
+  '@dnd-mapp/config-typescript@1.0.0':
+    resolution: {integrity: sha512-bnBzo47sk3NhjgdhkupU0Svte2jh3b08U/i3zdhtCDqmxzHixuDpk4DH//p9pRMdImaIWigkSu98BTeVr9L6iQ==}
+    engines: {node: ^24.21.0}
+    peerDependencies:
+      typescript: ^6
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -458,6 +494,16 @@ packages:
     resolution: {integrity: sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==}
     engines: {node: '>=8.6'}
 
+  prettier-plugin-organize-imports@4.3.0:
+    resolution: {integrity: sha512-FxFz0qFhyBsGdIsb697f/EkvHzi5SZOhWAjxcx2dLt+Q532bAlhswcXGYB1yzjZ69kW8UoadFBw7TyNwlq96Iw==}
+    peerDependencies:
+      prettier: '>=2.0'
+      typescript: '>=2.9'
+      vue-tsc: ^2.1.0 || 3
+    peerDependenciesMeta:
+      vue-tsc:
+        optional: true
+
   prettier@3.9.7:
     resolution: {integrity: sha512-T3mF5P7HFzZVLDQuCUNtJj6WK1pcpLMweMNUVwGb01bLNkH9AkKxtZvmInw8K6bnn2O3d6/5RHl6zSHiBAD0Og==}
     engines: {node: '>=14'}
@@ -497,6 +543,11 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   uc.micro@2.1.0:
     resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
 
@@ -508,6 +559,14 @@ packages:
     engines: {node: '>=20'}
 
 snapshots:
+
+  '@dnd-mapp/config-prettier@1.0.0(prettier@3.9.7)':
+    dependencies:
+      prettier: 3.9.7
+
+  '@dnd-mapp/config-typescript@1.0.0(typescript@6.0.3)':
+    dependencies:
+      typescript: 6.0.3
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -875,6 +934,11 @@ snapshots:
 
   picomatch@2.3.2: {}
 
+  prettier-plugin-organize-imports@4.3.0(prettier@3.9.7)(typescript@6.0.3):
+    dependencies:
+      prettier: 3.9.7
+      typescript: 6.0.3
+
   prettier@3.9.7: {}
 
   punycode.js@2.3.1: {}
@@ -903,6 +967,8 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
+
+  typescript@6.0.3: {}
 
   uc.micro@2.1.0: {}
 

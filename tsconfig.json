@@ -1,0 +1,13 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "@dnd-mapp/config-typescript/base",
+    "include": ["scripts"],
+    "compilerOptions": {
+        "allowJs": true,
+        "module": "nodenext",
+        "checkJs": true,
+        "noEmit": true,
+        "target": "es2024",
+        "types": ["node"]
+    }
+}

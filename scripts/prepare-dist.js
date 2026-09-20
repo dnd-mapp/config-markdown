@@ -22,6 +22,12 @@ const stagingDir = join(rootDir, '.tmp');
 /** Fields of `package.json` that only matter for development and are left out of the published manifest. */
 const REMOVED_FIELDS = ['$schema', 'scripts', 'devDependencies', 'devEngines'];
 
+/**
+ * The parts of `package.json` that this script reads. Any other field is passed through untouched.
+ *
+ * @typedef {{ name: string; version: string; exports?: unknown; publishConfig?: { directory?: string }; [field: string]: unknown }} Manifest
+ */
+
 /** Files and directories, relative to the repository root, that are copied into `dist` as they are. */
 const INCLUDED = ['configs', 'CHANGELOG.md', 'README.md', 'LICENSE'];
 
@@ -32,8 +38,8 @@ const INCLUDED = ['configs', 'CHANGELOG.md', 'README.md', 'LICENSE'];
  *
  * @template T
  * @param {string} message The message of the error to throw on failure.
- * @param {() => T | Promise<T>} fn The function to run.
- * @returns {Promise<T>} The value that `fn` returned.
+ * @param {() => T} fn The function to run.
+ * @returns {Promise<Awaited<T>>} The value that `fn` returned, or resolved to.
  * @throws {Error} When `fn` throws or rejects.
  */
 async function withContext(message, fn) {
@@ -49,14 +55,15 @@ async function withContext(message, fn) {
  *
  * Removes the development fields and `publishConfig.directory`.
  *
- * @returns {Promise<Record<string, unknown>>} The manifest to write to `dist`.
+ * @returns {Promise<Manifest>} The manifest to write to `dist`.
  * @throws {Error} When `package.json` cannot be read or parsed.
  */
 async function createPublishManifest() {
-    const content = await withContext('Failed to read package.json', () =>
+    const content = await withContext('Failed to read "package.json"', () =>
         readFile(join(rootDir, 'package.json'), 'utf-8'),
     );
-    const manifest = await withContext('Failed to parse package.json', () => JSON.parse(content));
+    /** @type {Manifest} */
+    const manifest = await withContext('Failed to parse "package.json"', () => JSON.parse(content));
 
     for (const field of REMOVED_FIELDS) {
         delete manifest[field];
@@ -74,20 +81,20 @@ async function createPublishManifest() {
  * @throws {Error} When the directory cannot be removed or created.
  */
 async function resetDirectory(directory) {
-    await withContext(`Failed to remove ${directory}`, () => rm(directory, { recursive: true, force: true }));
-    await withContext(`Failed to create ${directory}`, () => mkdir(directory, { recursive: true }));
+    await withContext(`Failed to remove "${directory}"`, () => rm(directory, { recursive: true, force: true }));
+    await withContext(`Failed to create "${directory}"`, () => mkdir(directory, { recursive: true }));
 }
 
 /**
  * Writes the manifest to `package.json` in the given directory.
  *
  * @param {string} directory The directory to write to.
- * @param {Record<string, unknown>} manifest The manifest to write.
+ * @param {Manifest} manifest The manifest to write.
  * @returns {Promise<void>}
  * @throws {Error} When the file cannot be written.
  */
 async function writeManifest(directory, manifest) {
-    await withContext(`Failed to write package.json to ${directory}`, () =>
+    await withContext(`Failed to write "package.json" to "${directory}"`, () =>
         writeFile(join(directory, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`),
     );
 }
@@ -105,9 +112,10 @@ async function writeManifest(directory, manifest) {
 async function copyIncluded(directory) {
     const results = await Promise.allSettled(
         INCLUDED.map((entry) =>
-            withContext(`Failed to copy ${entry}`, () =>
-                cp(join(rootDir, entry), join(directory, entry), { recursive: true }),
-            ),
+            withContext(`Failed to copy "${entry}"`, async () => {
+                await cp(join(rootDir, entry), join(directory, entry), { recursive: true });
+                console.log(`  Copied "${entry}"`);
+            }),
         ),
     );
     const failures = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
@@ -142,7 +150,7 @@ function collectExportTargets(exportsField) {
  * Every target is checked, so a single run reports all the missing files.
  *
  * @param {string} directory The directory that holds the package to verify.
- * @param {Record<string, unknown>} manifest The manifest that is published with the package.
+ * @param {Manifest} manifest The manifest that is published with the package.
  * @returns {Promise<void>}
  * @throws {Error} When one or more targets of `exports` do not exist.
  */
@@ -161,6 +169,7 @@ async function verifyExports(directory, manifest) {
     if (missing.length > 0) {
         throw new Error(`The exports field points to files that are not published: ${missing.join(', ')}`);
     }
+    console.log(`  Verified ${targets.length} export target(s)`);
 }
 
 /**
@@ -170,8 +179,8 @@ async function verifyExports(directory, manifest) {
  * @throws {Error} When `dist` cannot be removed or the staging directory cannot be moved.
  */
 async function replaceDist() {
-    await withContext(`Failed to remove ${distDir}`, () => rm(distDir, { recursive: true, force: true }));
-    await withContext(`Failed to move ${stagingDir} to ${distDir}`, () => rename(stagingDir, distDir));
+    await withContext(`Failed to remove "${distDir}"`, () => rm(distDir, { recursive: true, force: true }));
+    await withContext(`Failed to move "${stagingDir}" to "${distDir}"`, () => rename(stagingDir, distDir));
 }
 
 /**
@@ -185,21 +194,35 @@ async function replaceDist() {
  * @throws {Error} When any step fails.
  */
 async function prepareDist() {
+    console.log('Preparing dist...');
     const manifest = await createPublishManifest();
+    console.log(`Read package.json for "${manifest.name}@${manifest.version}"`);
 
+    console.log(`Resetting staging directory "${stagingDir}"`);
     await resetDirectory(stagingDir);
 
     try {
+        console.log('Writing "package.json"');
         await writeManifest(stagingDir, manifest);
+
+        console.log(`Copying ${INCLUDED.length} entries`);
         await copyIncluded(stagingDir);
+
+        console.log('Verifying exports');
         await verifyExports(stagingDir, manifest);
+
+        console.log(`Replacing "${distDir}"`);
         await replaceDist();
     } catch (error) {
+        console.error(`Preparing dist failed, removing "${stagingDir}"`);
+
         await rm(stagingDir, { recursive: true, force: true }).catch((cleanupError) => {
-            console.warn(`Could not remove ${stagingDir}: ${cleanupError.message}`);
+            console.warn(`Could not remove "${stagingDir}": ${cleanupError.message}`);
         });
         throw error;
     }
+
+    console.log('Prepared dist');
 }
 
 await prepareDist();
