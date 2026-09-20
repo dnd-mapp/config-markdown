@@ -112,9 +112,10 @@ async function writeManifest(directory, manifest) {
 async function copyIncluded(directory) {
     const results = await Promise.allSettled(
         INCLUDED.map((entry) =>
-            withContext(`Failed to copy "${entry}"`, () =>
-                cp(join(rootDir, entry), join(directory, entry), { recursive: true }),
-            ),
+            withContext(`Failed to copy "${entry}"`, async () => {
+                await cp(join(rootDir, entry), join(directory, entry), { recursive: true });
+                console.log(`  Copied "${entry}"`);
+            }),
         ),
     );
     const failures = results.filter((result) => result.status === 'rejected').map((result) => result.reason);
@@ -168,6 +169,7 @@ async function verifyExports(directory, manifest) {
     if (missing.length > 0) {
         throw new Error(`The exports field points to files that are not published: ${missing.join(', ')}`);
     }
+    console.log(`  Verified ${targets.length} export target(s)`);
 }
 
 /**
@@ -192,21 +194,35 @@ async function replaceDist() {
  * @throws {Error} When any step fails.
  */
 async function prepareDist() {
+    console.log('Preparing dist...');
     const manifest = await createPublishManifest();
+    console.log(`Read package.json for "${manifest.name}@${manifest.version}"`);
 
+    console.log(`Resetting staging directory "${stagingDir}"`);
     await resetDirectory(stagingDir);
 
     try {
+        console.log('Writing "package.json"');
         await writeManifest(stagingDir, manifest);
+
+        console.log(`Copying ${INCLUDED.length} entries`);
         await copyIncluded(stagingDir);
+
+        console.log('Verifying exports');
         await verifyExports(stagingDir, manifest);
+
+        console.log(`Replacing "${distDir}"`);
         await replaceDist();
     } catch (error) {
+        console.error(`Preparing dist failed, removing "${stagingDir}"`);
+
         await rm(stagingDir, { recursive: true, force: true }).catch((cleanupError) => {
             console.warn(`Could not remove "${stagingDir}": ${cleanupError.message}`);
         });
         throw error;
     }
+
+    console.log('Prepared dist');
 }
 
 await prepareDist();
