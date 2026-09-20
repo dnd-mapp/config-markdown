@@ -27,6 +27,6 @@ catalog:
   typescript: ~6.0.3
 catalogs:
   prettier:
-    "@dnd-mapp/config-prettier": ~1.0.0
+    "@dnd-mapp/config-prettier": ~1.1.0
     prettier: ~3.9.7
     prettier-plugin-organize-imports: ~4.3.0
