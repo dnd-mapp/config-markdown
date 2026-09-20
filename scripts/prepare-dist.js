@@ -22,6 +22,12 @@ const stagingDir = join(rootDir, '.tmp');
 /** Fields of `package.json` that only matter for development and are left out of the published manifest. */
 const REMOVED_FIELDS = ['$schema', 'scripts', 'devDependencies', 'devEngines'];
 
+/**
+ * The parts of `package.json` that this script reads. Any other field is passed through untouched.
+ *
+ * @typedef {{ name: string; version: string; exports?: unknown; publishConfig?: { directory?: string }; [field: string]: unknown }} Manifest
+ */
+
 /** Files and directories, relative to the repository root, that are copied into `dist` as they are. */
 const INCLUDED = ['configs', 'CHANGELOG.md', 'README.md', 'LICENSE'];
 
@@ -32,8 +38,8 @@ const INCLUDED = ['configs', 'CHANGELOG.md', 'README.md', 'LICENSE'];
  *
  * @template T
  * @param {string} message The message of the error to throw on failure.
- * @param {() => T | Promise<T>} fn The function to run.
- * @returns {Promise<T>} The value that `fn` returned.
+ * @param {() => T} fn The function to run.
+ * @returns {Promise<Awaited<T>>} The value that `fn` returned, or resolved to.
  * @throws {Error} When `fn` throws or rejects.
  */
 async function withContext(message, fn) {
@@ -49,13 +55,14 @@ async function withContext(message, fn) {
  *
  * Removes the development fields and `publishConfig.directory`.
  *
- * @returns {Promise<Record<string, unknown>>} The manifest to write to `dist`.
+ * @returns {Promise<Manifest>} The manifest to write to `dist`.
  * @throws {Error} When `package.json` cannot be read or parsed.
  */
 async function createPublishManifest() {
     const content = await withContext('Failed to read package.json', () =>
         readFile(join(rootDir, 'package.json'), 'utf-8'),
     );
+    /** @type {Manifest} */
     const manifest = await withContext('Failed to parse package.json', () => JSON.parse(content));
 
     for (const field of REMOVED_FIELDS) {
@@ -82,7 +89,7 @@ async function resetDirectory(directory) {
  * Writes the manifest to `package.json` in the given directory.
  *
  * @param {string} directory The directory to write to.
- * @param {Record<string, unknown>} manifest The manifest to write.
+ * @param {Manifest} manifest The manifest to write.
  * @returns {Promise<void>}
  * @throws {Error} When the file cannot be written.
  */
@@ -142,7 +149,7 @@ function collectExportTargets(exportsField) {
  * Every target is checked, so a single run reports all the missing files.
  *
  * @param {string} directory The directory that holds the package to verify.
- * @param {Record<string, unknown>} manifest The manifest that is published with the package.
+ * @param {Manifest} manifest The manifest that is published with the package.
  * @returns {Promise<void>}
  * @throws {Error} When one or more targets of `exports` do not exist.
  */
