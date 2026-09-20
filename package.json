@@ -1,0 +1,65 @@
+{
+  "$schema": "https://www.schemastore.org/package.json",
+  "name": "@dnd-mapp/config-markdown",
+  "description": "",
+  "version": "0.0.0",
+  "license": "MIT",
+  "type": "module",
+  "author": "D&D Mapp",
+  "keywords": [],
+  "homepage": "https://github.com/dnd-mapp/config-markdown#readme",
+  "bugs": {
+    "url": "https://github.com/dnd-mapp/config-markdown/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnd-mapp/config-markdown.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
+  },
+  "exports": {
+    ".": "./configs/base.yaml",
+    "./base": "./configs/base.yaml",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "prepublishOnly": "node scripts/prepare-dist.js",
+    "format": "prettier -w .",
+    "format-check": "prettier -c .",
+    "lint-md": "markdownlint-cli2"
+  },
+  "engines": {
+    "node": "^24.21.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.21.0",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.4.2",
+      "onFail": "error"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "markdownlint-cli2": "catalog:",
+    "prettier": "catalog:prettier"
+  },
+  "peerDependencies": {
+    "markdownlint-cli": "^0.49.1",
+    "markdownlint-cli2": "^0.23.2"
+  },
+  "peerDependenciesMeta": {
+    "markdownlint-cli": {
+      "optional": true
+    },
+    "markdownlint-cli2": {
+      "optional": true
+    }
+  }
+}
