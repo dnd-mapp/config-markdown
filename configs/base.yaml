@@ -1,0 +1,19 @@
+# Base markdownlint rules, shared through `extends` by markdownlint-cli2 and markdownlint-cli.
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+$schema: https://raw.githubusercontent.com/DavidAnson/markdownlint/refs/heads/main/schema/markdownlint-config-schema.json
+default: true
+
+# Prose is never hard wrapped, so line length is left to the editor.
+MD013: false
+
+# Allow repeated headings under different parents, such as in a changelog.
+MD024:
+    siblings_only: true
+
+# Nested list items are indented by 4 spaces, matching .editorconfig.
+MD007:
+    indent: 4
+
+# Tables are pretty printed with aligned pipes.
+MD060:
+    style: aligned
