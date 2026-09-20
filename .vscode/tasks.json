@@ -21,6 +21,13 @@
             "type": "shell",
             "command": "pnpm run lint-md",
             "problemMatcher": []
+        },
+        {
+            "label": "typecheck",
+            "detail": "Type checks the scripts of the repository with TypeScript",
+            "type": "shell",
+            "command": "pnpm run typecheck",
+            "problemMatcher": ["$tsc"]
         }
     ]
 }
