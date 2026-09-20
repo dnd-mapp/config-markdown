@@ -52,10 +52,12 @@
     }
   },
   "devDependencies": {
+    "@dnd-mapp/config-prettier": "catalog:prettier",
     "@dnd-mapp/config-typescript": "catalog:",
     "@types/node": "catalog:",
     "markdownlint-cli2": "catalog:",
     "prettier": "catalog:prettier",
+    "prettier-plugin-organize-imports": "catalog:prettier",
     "typescript": "catalog:"
   },
   "peerDependencies": {

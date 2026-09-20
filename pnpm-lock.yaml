@@ -178,14 +178,23 @@ catalogs:
       specifier: ~6.0.3
       version: 6.0.3
   prettier:
+    '@dnd-mapp/config-prettier':
+      specifier: ~1.0.0
+      version: 1.0.0
     prettier:
       specifier: ~3.9.7
       version: 3.9.7
+    prettier-plugin-organize-imports:
+      specifier: ~4.3.0
+      version: 4.3.0
 
 importers:
 
   .:
     devDependencies:
+      '@dnd-mapp/config-prettier':
+        specifier: catalog:prettier
+        version: 1.0.0(prettier@3.9.7)
       '@dnd-mapp/config-typescript':
         specifier: 'catalog:'
         version: 1.0.0(typescript@6.0.3)
@@ -198,12 +207,21 @@ importers:
       prettier:
         specifier: catalog:prettier
         version: 3.9.7
+      prettier-plugin-organize-imports:
+        specifier: catalog:prettier
+        version: 4.3.0(prettier@3.9.7)(typescript@6.0.3)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
     publishDirectory: dist
 
 packages:
+
+  '@dnd-mapp/config-prettier@1.0.0':
+    resolution: {integrity: sha512-+s+ivqgBkRLr9y6akRzPYHZM7f9yIGz/Abbm2gCenzWT02j9b4c/nktkGSu/fZY+Zi8O4nbUnx03nA4/L01i8Q==}
+    engines: {node: ^24.21.0}
+    peerDependencies:
+      prettier: ^3
 
   '@dnd-mapp/config-typescript@1.0.0':
     resolution: {integrity: sha512-bnBzo47sk3NhjgdhkupU0Svte2jh3b08U/i3zdhtCDqmxzHixuDpk4DH//p9pRMdImaIWigkSu98BTeVr9L6iQ==}
@@ -476,6 +494,16 @@ packages:
     resolution: {integrity: sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==}
     engines: {node: '>=8.6'}
 
+  prettier-plugin-organize-imports@4.3.0:
+    resolution: {integrity: sha512-FxFz0qFhyBsGdIsb697f/EkvHzi5SZOhWAjxcx2dLt+Q532bAlhswcXGYB1yzjZ69kW8UoadFBw7TyNwlq96Iw==}
+    peerDependencies:
+      prettier: '>=2.0'
+      typescript: '>=2.9'
+      vue-tsc: ^2.1.0 || 3
+    peerDependenciesMeta:
+      vue-tsc:
+        optional: true
+
   prettier@3.9.7:
     resolution: {integrity: sha512-T3mF5P7HFzZVLDQuCUNtJj6WK1pcpLMweMNUVwGb01bLNkH9AkKxtZvmInw8K6bnn2O3d6/5RHl6zSHiBAD0Og==}
     engines: {node: '>=14'}
@@ -531,6 +559,10 @@ packages:
     engines: {node: '>=20'}
 
 snapshots:
+
+  '@dnd-mapp/config-prettier@1.0.0(prettier@3.9.7)':
+    dependencies:
+      prettier: 3.9.7
 
   '@dnd-mapp/config-typescript@1.0.0(typescript@6.0.3)':
     dependencies:
@@ -901,6 +933,11 @@ snapshots:
       is-hexadecimal: 2.0.1
 
   picomatch@2.3.2: {}
+
+  prettier-plugin-organize-imports@4.3.0(prettier@3.9.7)(typescript@6.0.3):
+    dependencies:
+      prettier: 3.9.7
+      typescript: 6.0.3
 
   prettier@3.9.7: {}
 
