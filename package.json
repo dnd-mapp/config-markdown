@@ -34,7 +34,8 @@
     "prepublishOnly": "node scripts/prepare-dist.js",
     "format": "prettier -w .",
     "format-check": "prettier -c .",
-    "lint-md": "markdownlint-cli2"
+    "lint-md": "markdownlint-cli2",
+    "typecheck": "tsc -p tsconfig.json"
   },
   "engines": {
     "node": "^24.21.0"

@@ -39,6 +39,12 @@ pnpm run format-check
 pnpm run format
 ```
 
+The scripts in `scripts/` are JavaScript files that TypeScript checks with `checkJs`. Run the type check after you change one.
+
+```bash
+pnpm run typecheck
+```
+
 The `peerDependencies` ranges set the lowest CLI versions that bundle a `markdownlint` release with every rule that the config uses. Raise them when you enable a rule that older versions do not know, because those versions ignore it silently.
 
 When you add or change a rule, update the README in the same pull request.
