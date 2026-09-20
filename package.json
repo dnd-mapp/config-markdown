@@ -1,12 +1,18 @@
 {
   "$schema": "https://www.schemastore.org/package.json",
   "name": "@dnd-mapp/config-markdown",
-  "description": "",
+  "description": "Markdownlint configuration shared across D&D Mapp projects.",
   "version": "0.0.0",
   "license": "MIT",
   "type": "module",
   "author": "D&D Mapp",
-  "keywords": [],
+  "keywords": [
+    "dnd-mapp",
+    "markdownlint",
+    "markdownlint-config",
+    "config",
+    "linting"
+  ],
   "homepage": "https://github.com/dnd-mapp/config-markdown#readme",
   "bugs": {
     "url": "https://github.com/dnd-mapp/config-markdown/issues"
