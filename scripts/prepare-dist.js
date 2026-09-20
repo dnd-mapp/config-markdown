@@ -59,11 +59,11 @@ async function withContext(message, fn) {
  * @throws {Error} When `package.json` cannot be read or parsed.
  */
 async function createPublishManifest() {
-    const content = await withContext('Failed to read package.json', () =>
+    const content = await withContext('Failed to read "package.json"', () =>
         readFile(join(rootDir, 'package.json'), 'utf-8'),
     );
     /** @type {Manifest} */
-    const manifest = await withContext('Failed to parse package.json', () => JSON.parse(content));
+    const manifest = await withContext('Failed to parse "package.json"', () => JSON.parse(content));
 
     for (const field of REMOVED_FIELDS) {
         delete manifest[field];
@@ -81,8 +81,8 @@ async function createPublishManifest() {
  * @throws {Error} When the directory cannot be removed or created.
  */
 async function resetDirectory(directory) {
-    await withContext(`Failed to remove ${directory}`, () => rm(directory, { recursive: true, force: true }));
-    await withContext(`Failed to create ${directory}`, () => mkdir(directory, { recursive: true }));
+    await withContext(`Failed to remove "${directory}"`, () => rm(directory, { recursive: true, force: true }));
+    await withContext(`Failed to create "${directory}"`, () => mkdir(directory, { recursive: true }));
 }
 
 /**
@@ -94,7 +94,7 @@ async function resetDirectory(directory) {
  * @throws {Error} When the file cannot be written.
  */
 async function writeManifest(directory, manifest) {
-    await withContext(`Failed to write package.json to ${directory}`, () =>
+    await withContext(`Failed to write "package.json" to "${directory}"`, () =>
         writeFile(join(directory, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`),
     );
 }
@@ -112,7 +112,7 @@ async function writeManifest(directory, manifest) {
 async function copyIncluded(directory) {
     const results = await Promise.allSettled(
         INCLUDED.map((entry) =>
-            withContext(`Failed to copy ${entry}`, () =>
+            withContext(`Failed to copy "${entry}"`, () =>
                 cp(join(rootDir, entry), join(directory, entry), { recursive: true }),
             ),
         ),
@@ -177,8 +177,8 @@ async function verifyExports(directory, manifest) {
  * @throws {Error} When `dist` cannot be removed or the staging directory cannot be moved.
  */
 async function replaceDist() {
-    await withContext(`Failed to remove ${distDir}`, () => rm(distDir, { recursive: true, force: true }));
-    await withContext(`Failed to move ${stagingDir} to ${distDir}`, () => rename(stagingDir, distDir));
+    await withContext(`Failed to remove "${distDir}"`, () => rm(distDir, { recursive: true, force: true }));
+    await withContext(`Failed to move "${stagingDir}" to "${distDir}"`, () => rename(stagingDir, distDir));
 }
 
 /**
@@ -203,7 +203,7 @@ async function prepareDist() {
         await replaceDist();
     } catch (error) {
         await rm(stagingDir, { recursive: true, force: true }).catch((cleanupError) => {
-            console.warn(`Could not remove ${stagingDir}: ${cleanupError.message}`);
+            console.warn(`Could not remove "${stagingDir}": ${cleanupError.message}`);
         });
         throw error;
     }
