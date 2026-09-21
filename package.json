@@ -31,7 +31,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "prepublishOnly": "node scripts/prepare-dist.js",
+    "prepublishOnly": "prepare-dist",
     "format": "prettier -w .",
     "format-check": "prettier -c .",
     "lint-md": "markdownlint-cli2",
@@ -55,6 +55,7 @@
   "devDependencies": {
     "@dnd-mapp/config-prettier": "catalog:prettier",
     "@dnd-mapp/config-typescript": "catalog:",
+    "@dnd-mapp/package-builder": "catalog:",
     "@types/node": "catalog:",
     "markdownlint-cli2": "catalog:",
     "prettier": "catalog:prettier",

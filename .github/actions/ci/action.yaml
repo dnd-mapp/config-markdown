@@ -1,5 +1,5 @@
 name: CI checks
-description: Installs dependencies, checks formatting, lints Markdown, and type checks scripts
+description: Installs dependencies, checks formatting, lints Markdown, and type checks
 
 runs:
     using: composite
