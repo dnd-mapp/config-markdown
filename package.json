@@ -53,10 +53,13 @@
     }
   },
   "devDependencies": {
+    "@commitlint/cli": "catalog:commitlint",
+    "@dnd-mapp/config-commitlint": "catalog:commitlint",
     "@dnd-mapp/config-prettier": "catalog:prettier",
     "@dnd-mapp/config-typescript": "catalog:",
     "@dnd-mapp/package-builder": "catalog:",
     "@types/node": "catalog:",
+    "lefthook": "catalog:commitlint",
     "markdownlint-cli2": "catalog:",
     "prettier": "catalog:prettier",
     "prettier-plugin-organize-imports": "catalog:prettier",
@@ -64,12 +67,14 @@
   },
   "peerDependencies": {
     "markdownlint-cli": "^0.49.1",
+    "lefthook": "catalog:commitlint",
     "markdownlint-cli2": "^0.23.2"
   },
   "peerDependenciesMeta": {
     "markdownlint-cli": {
       "optional": true
     },
+    "lefthook": "catalog:commitlint",
     "markdownlint-cli2": {
       "optional": true
     }
