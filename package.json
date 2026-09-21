@@ -67,14 +67,12 @@
   },
   "peerDependencies": {
     "markdownlint-cli": "^0.49.1",
-    "lefthook": "catalog:commitlint",
     "markdownlint-cli2": "^0.23.2"
   },
   "peerDependenciesMeta": {
     "markdownlint-cli": {
       "optional": true
     },
-    "lefthook": "catalog:commitlint",
     "markdownlint-cli2": {
       "optional": true
     }
