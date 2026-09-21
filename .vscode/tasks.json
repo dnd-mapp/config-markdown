@@ -24,7 +24,7 @@
         },
         {
             "label": "typecheck",
-            "detail": "Type checks the scripts of the repository with TypeScript",
+            "detail": "Type checks files of the repository with TypeScript",
             "type": "shell",
             "command": "pnpm run typecheck",
             "problemMatcher": ["$tsc"]

@@ -39,7 +39,7 @@ pnpm run format-check
 pnpm run format
 ```
 
-The scripts in `scripts/` are JavaScript files that TypeScript checks with `checkJs`. Run the type check after you change one.
+TypeScript checks the config files of the repository, such as `.prettierrc.ts`. Run the type check after you change one.
 
 ```bash
 pnpm run typecheck
