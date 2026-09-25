@@ -24,6 +24,17 @@ Newly published releases are held back for three days through `minimumReleaseAge
 
 Install [actionlint](https://github.com/rhysd/actionlint) to lint the workflows locally, for example with `brew install actionlint`. CI runs the version that `.github/actions/ci/action.yaml` pins.
 
+## Git hooks
+
+[Lefthook](https://lefthook.dev/) installs the Git hooks when you run `pnpm install`. The hooks are defined in `lefthook.yaml`. `pnpm-workspace.yaml` turns off the side-effects cache of pnpm, because a cached build of lefthook skips the script that installs the hooks. If the hooks are still missing, install them with `pnpm exec lefthook install`.
+
+| Hook         | Runs                                  | On                        |
+|:-------------|:--------------------------------------|:--------------------------|
+| `pre-commit` | Prettier and markdownlint-cli2 checks | The staged files          |
+| `commit-msg` | commitlint                            | The message of the commit |
+
+The pre-commit hooks only check files. Run `pnpm run format` to fix formatting issues and stage the result.
+
 ## Changing or adding a config
 
 Configs live in `configs/*.yaml`. The `exports` map in `package.json` exposes each config, and the package root resolves to `base`.
