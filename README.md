@@ -4,7 +4,7 @@
 [![npm version](https://img.shields.io/npm/v/@dnd-mapp/config-markdown)](https://www.npmjs.com/package/@dnd-mapp/config-markdown)
 [![license](https://img.shields.io/npm/l/@dnd-mapp/config-markdown)](LICENSE)
 
-Shared markdownlint config for all D&D Mapp projects.
+Shared markdownlint config for consistent Markdown style.
 
 ## Requirements
 
