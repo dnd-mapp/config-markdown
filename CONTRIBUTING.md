@@ -22,6 +22,8 @@ Dependency versions live in the `catalog` in `pnpm-workspace.yaml`, which uses `
 
 Newly published releases are held back for three days through `minimumReleaseAge`. You may need to wait before you can bump to a very recent version.
 
+Install [actionlint](https://github.com/rhysd/actionlint) to lint the workflows locally, for example with `brew install actionlint`. CI runs the version that `.github/actions/ci/action.yaml` pins.
+
 ## Changing or adding a config
 
 Configs live in `configs/*.yaml`. The `exports` map in `package.json` exposes each config, and the package root resolves to `base`.
@@ -40,6 +42,12 @@ TypeScript checks the config files of the repository, such as `.prettierrc.ts`. 
 
 ```bash
 pnpm run typecheck
+```
+
+Lint the workflows with actionlint after you change a file in `.github`.
+
+```bash
+actionlint
 ```
 
 The `peerDependencies` ranges set the lowest CLI versions that bundle a `markdownlint` release with every rule that the config uses. Raise them when you enable a rule that older versions do not know, because those versions ignore it silently.
